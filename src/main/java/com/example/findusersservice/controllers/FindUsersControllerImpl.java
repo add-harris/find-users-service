@@ -13,7 +13,7 @@ public class FindUsersControllerImpl implements FindUsersController {
     @GetMapping("/v1/london")
     public ResponseEntity findUsers() {
         log.info("Request received");
-        return null;
+        return ResponseEntity.ok().build();
     }
 
 }

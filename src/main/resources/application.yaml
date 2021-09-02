@@ -1,0 +1,8 @@
+
+spring:
+  application:
+    name: find-users-service
+
+server:
+  servlet:
+    context-path: /find-users

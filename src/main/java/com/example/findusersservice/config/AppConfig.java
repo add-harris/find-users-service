@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Configuration
 @ConfigurationProperties(prefix = AppConfig.APP_CONFIG_PREFIX)
 public class AppConfig {
 

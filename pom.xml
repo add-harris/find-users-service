@@ -15,6 +15,7 @@
 	<description>API that returns all users who are listed as either living in London, or whose current coordinates are within 50 miles of London.</description>
 	<properties>
 		<java.version>11</java.version>
+		<wiremock.version>2.30.1</wiremock.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -41,6 +42,19 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-jre8</artifactId>
+			<version>${wiremock.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>junit</artifactId>
+					<groupId>junit</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 	</dependencies>
 
 	<build>

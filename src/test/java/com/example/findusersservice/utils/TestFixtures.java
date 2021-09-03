@@ -5,6 +5,7 @@ import com.example.findusersservice.models.User;
 public class TestFixtures {
 
     public static final User stubUserJeff = new User(
+            1,
             "Jeff",
             "GoldBlum",
             "jeffgold@hotmail.com",
@@ -14,6 +15,7 @@ public class TestFixtures {
     );
 
     public static final User stubUserBill = new User(
+            2,
             "Bill",
             "Murray",
             "billmurr@gmail.com",

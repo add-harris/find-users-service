@@ -42,13 +42,9 @@ class UserServiceImplTest {
 
     @Test
     void make_call_to_test_city_endpoint () {
-
         stubFor(get(testCityEndpoint).willReturn(ok()));
-
         this.userService.getUsers();
-
         verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
-
     }
 
 }

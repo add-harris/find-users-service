@@ -34,15 +34,16 @@ public class UserServiceImpl implements UserService {
     }
 
     private Flux<User> getLondonCityUsers() {
-        return this.webClient.get()
-                .uri(appConfig.getCityEndpoint())
-                .retrieve()
-                .bodyToFlux(User.class);
+        return getUsersApiCall(appConfig.getCityEndpoint());
     }
 
     private Flux<User> getLondonAreaUsers() {
+        return getUsersApiCall(appConfig.getUsersEndpoint());
+    }
+
+    private Flux<User> getUsersApiCall(String endpoint) {
         return this.webClient.get()
-                .uri(appConfig.getUsersEndpoint())
+                .uri(endpoint)
                 .retrieve()
                 .bodyToFlux(User.class);
     }

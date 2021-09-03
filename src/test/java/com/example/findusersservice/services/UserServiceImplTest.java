@@ -48,8 +48,8 @@ class UserServiceImplTest {
 
     @Test
     void make_call_to_test_city_endpoint () {
-        stubFor(get(testCityEndpoint).willReturn(ok()));
-        stubFor(get(testUsersEndpoint).willReturn(ok()));
+        stubCityEndpoint();
+        stubUserEndpoint();
         this.userService.getUsers();
         verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
     }
@@ -62,7 +62,7 @@ class UserServiceImplTest {
                         .withBody(basicStubbedUsersJson())
                 )
         );
-        stubFor(get(testUsersEndpoint).willReturn(ok()));
+        stubUserEndpoint();
 
         List<User> users = this.userService.getUsers();
 
@@ -73,10 +73,18 @@ class UserServiceImplTest {
 
     @Test
     void make_call_to_test_users_endpoint () {
-        stubFor(get(testCityEndpoint).willReturn(ok()));
-        stubFor(get(testUsersEndpoint).willReturn(ok()));
+        stubCityEndpoint();
+        stubUserEndpoint();
         this.userService.getUsers();
         verify(1, getRequestedFor(urlEqualTo(testUsersEndpoint)));
+    }
+
+    private void stubCityEndpoint() {
+        stubFor(get(testCityEndpoint).willReturn(ok()));
+    }
+
+    private void stubUserEndpoint() {
+        stubFor(get(testUsersEndpoint).willReturn(ok()));
     }
 
 }

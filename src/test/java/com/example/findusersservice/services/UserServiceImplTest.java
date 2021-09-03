@@ -69,4 +69,11 @@ class UserServiceImplTest {
         assertEquals(stubUserBill, users.get(1));
     }
 
+    @Test
+    void make_call_to_test_users_endpoint () {
+        stubFor(get(testUsersEndpoint).willReturn(ok()));
+        this.userService.getUsers();
+        verify(1, getRequestedFor(urlEqualTo(testUsersEndpoint)));
+    }
+
 }

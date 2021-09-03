@@ -26,12 +26,23 @@ public class UserServiceImpl implements UserService {
         log.info("getting users");
 
         log.info("making request to city endpoint for London users");
-        return getLondonCityUsers().collectList().block();
+        var londonUsers = getLondonCityUsers().collectList().block();
+
+        var londonAreaUsers = getLondonAreaUsers().collectList().block();
+
+        return londonUsers;
     }
 
     private Flux<User> getLondonCityUsers() {
         return this.webClient.get()
                 .uri(appConfig.getCityEndpoint())
+                .retrieve()
+                .bodyToFlux(User.class);
+    }
+
+    private Flux<User> getLondonAreaUsers() {
+        return this.webClient.get()
+                .uri(appConfig.getUsersEndpoint())
                 .retrieve()
                 .bodyToFlux(User.class);
     }

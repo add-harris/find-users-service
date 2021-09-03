@@ -9,3 +9,5 @@ server:
 
 application:
   base-backend-url: https://bpdts-test-app.herokuapp.com
+  city-endpoint: /city/London/users
+  users-endpoint: /users

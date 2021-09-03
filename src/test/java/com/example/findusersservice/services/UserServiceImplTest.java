@@ -19,6 +19,7 @@ class UserServiceImplTest {
 
     private final String testBaseUrl = "http://localhost:8080";
     private final String testCityEndpoint = "/city/London/users";
+    private final String testUsersEndpoint = "/users";
 
     @BeforeAll
     private static void beforeAll() {
@@ -32,8 +33,9 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        AppConfig testAppConfig = new AppConfig(testBaseUrl);
-        this.userService = new UserServiceImpl(testAppConfig, WebClient.builder());
+        AppConfig testAppConfig = new AppConfig(testBaseUrl, testCityEndpoint, testUsersEndpoint);
+        WebClient webClient = WebClient.builder().baseUrl(testBaseUrl).build();
+        this.userService = new UserServiceImpl(testAppConfig, webClient);
 
         wireMockServer.resetAll();
     }

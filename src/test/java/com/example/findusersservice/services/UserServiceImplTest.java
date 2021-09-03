@@ -1,6 +1,8 @@
 package com.example.findusersservice.services;
 
 import com.example.findusersservice.config.AppConfig;
+import com.example.findusersservice.models.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,8 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
+
+import static com.example.findusersservice.utils.TestFixtures.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserServiceImplTest {
 
@@ -20,6 +25,7 @@ class UserServiceImplTest {
     private final String testBaseUrl = "http://localhost:8080";
     private final String testCityEndpoint = "/city/London/users";
     private final String testUsersEndpoint = "/users";
+    private final String APPLICATION_JSON = "application/json";
 
     @BeforeAll
     private static void beforeAll() {
@@ -45,6 +51,22 @@ class UserServiceImplTest {
         stubFor(get(testCityEndpoint).willReturn(ok()));
         this.userService.getUsers();
         verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
+    }
+
+    @Test
+    void returns_london_city_users () throws JsonProcessingException {
+
+        stubFor(get(testCityEndpoint).willReturn(ok()
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(basicStubbedUsersJson())
+                )
+        );
+
+        List<User> users = this.userService.getUsers();
+
+        verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
+        assertEquals(stubUserJeff, users.get(0));
+        assertEquals(stubUserBill, users.get(1));
     }
 
 }

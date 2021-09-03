@@ -1,6 +1,10 @@
 package com.example.findusersservice.utils;
 
 import com.example.findusersservice.models.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.List;
 
 public class TestFixtures {
 
@@ -23,5 +27,14 @@ public class TestFixtures {
             2.123,
             2.456
     );
+
+    public static List<User> basicStubbedUsers() {
+        return List.of(stubUserJeff, stubUserBill);
+    }
+
+    public static String basicStubbedUsersJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(basicStubbedUsers());
+    }
 
 }

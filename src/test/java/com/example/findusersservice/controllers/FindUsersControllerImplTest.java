@@ -51,7 +51,7 @@ class FindUsersControllerImplTest {
     }
 
     @Test
-    void return_users_supplied_by_user_service() throws Exception {
+    void controller_returns_users_found_by_user_service() throws Exception {
 
         mockMvc.perform(get(LONDON_PATH_V1))
                 .andExpect(status().isOk())

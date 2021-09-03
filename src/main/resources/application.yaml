@@ -6,3 +6,6 @@ spring:
 server:
   servlet:
     context-path: /find-users
+
+application:
+  base-backend-url: https://bpdts-test-app.herokuapp.com

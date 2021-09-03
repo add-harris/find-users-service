@@ -24,7 +24,7 @@ public class FindUsersControllerImpl implements FindUsersController {
     @Override
     @GetMapping(LONDON_PATH_V1)
     public ResponseEntity<List<User>> findUsers() {
-        log.info("Request received");
+        log.info("Request received on path {}", LONDON_PATH_V1);
         return ResponseEntity.ok(this.userService.getUsers());
     }
 

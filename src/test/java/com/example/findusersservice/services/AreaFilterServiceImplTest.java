@@ -4,6 +4,8 @@ import com.example.findusersservice.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static com.example.findusersservice.utils.TestFixtures.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -52,6 +54,21 @@ class AreaFilterServiceImplTest {
         assertEquals(50.03, roundedAnswer(outsideAreaUser2Distance));
         assertEquals(50.39, roundedAnswer(outsideAreaUser3Distance));
         assertEquals(50.11, roundedAnswer(outsideAreaUser4Distance));
+    }
+
+    @Test
+    void given_users_that_are_within_50_miles_return_them() {
+        assertEquals(allLondonUsers(), this.areaFilterService.getUsersWithinArea(allLondonUsers()));
+    }
+
+    @Test
+    void given_users_that_outside_50_miles_exclude_them() {
+        assertEquals(List.of(), this.areaFilterService.getUsersWithinArea(outsideLondonUsers()));
+    }
+
+    @Test
+    void given_both_inside_and_outside_area_users_return_only_inside_users() {
+        assertEquals(allLondonUsers(), this.areaFilterService.getUsersWithinArea(allStubbedUsers()));
     }
 
     private double calculateDistance(User user) {

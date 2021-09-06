@@ -105,6 +105,21 @@ public class TestFixtures {
         return List.of(centralLondonUser1, centralLondonUser2, centralLondonUser3);
     }
 
+    public static List<User> allLondonUsers() {
+        return List.of(centralLondonUser1, centralLondonUser2, centralLondonUser3,
+                outerLondonUser1, outerLondonUser2, outerLondonUser3, outerLondonUser4);
+    }
+
+    public static List<User> outsideLondonUsers() {
+        return List.of(outsideAreaUser1, outsideAreaUser2, outsideAreaUser3, outsideAreaUser4);
+    }
+
+    public static List<User> allStubbedUsers() {
+        return List.of(centralLondonUser1, centralLondonUser2, centralLondonUser3,
+                outerLondonUser1, outerLondonUser2, outerLondonUser3, outerLondonUser4,
+                outsideAreaUser1, outsideAreaUser2, outsideAreaUser3, outsideAreaUser4);
+    }
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String basicStubbedUsersJson() throws JsonProcessingException {

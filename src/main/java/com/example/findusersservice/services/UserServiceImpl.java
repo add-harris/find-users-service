@@ -30,8 +30,10 @@ public class UserServiceImpl implements UserService {
         log.info("making request to city endpoint for London users");
         var londonUsers = getLondonCityUsers().collectList().block();
 
+        log.info("making request to users endpoint for all users");
         var allUsers = getLondonAreaUsers().collectList().block();
 
+        log.info("filtering for only users within designated area of London");
         var londonAreaUsers = areaFilterService.getUsersWithinArea(allUsers);
 
         return londonUsers;

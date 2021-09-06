@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.example.findusersservice.config.Constants.LONDON_PATH_V1;
+import static com.example.findusersservice.config.Constants.USERS_LONDON_PATH_V1;
 
 @RestController
 @Slf4j
@@ -22,9 +22,9 @@ public class FindUsersControllerImpl implements FindUsersController {
     }
 
     @Override
-    @GetMapping(LONDON_PATH_V1)
+    @GetMapping(USERS_LONDON_PATH_V1)
     public ResponseEntity<List<User>> findUsers() {
-        log.info("Request received on path {}", LONDON_PATH_V1);
+        log.info("Request received on path {}", USERS_LONDON_PATH_V1);
         return ResponseEntity.ok(this.userService.getUsers());
     }
 

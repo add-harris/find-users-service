@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static com.example.findusersservice.config.Constants.LONDON_PATH_V1;
+import static com.example.findusersservice.config.Constants.USERS_LONDON_PATH_V1;
 import static com.example.findusersservice.utils.TestFixtures.*;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -37,14 +37,14 @@ class FindUsersControllerImplTest {
     @Test
     void controller_returns_200_response_on_GET() throws Exception {
 
-        mockMvc.perform(get(LONDON_PATH_V1)).andExpect(status().isOk());
+        mockMvc.perform(get(USERS_LONDON_PATH_V1)).andExpect(status().isOk());
 
     }
 
     @Test
     void controller_calls_user_service() throws Exception {
 
-        mockMvc.perform(get(LONDON_PATH_V1)).andExpect(status().isOk());
+        mockMvc.perform(get(USERS_LONDON_PATH_V1)).andExpect(status().isOk());
 
         verify(mockUserService, times(1)).getUsers();
 
@@ -53,7 +53,7 @@ class FindUsersControllerImplTest {
     @Test
     void controller_returns_users_found_by_user_service() throws Exception {
 
-        mockMvc.perform(get(LONDON_PATH_V1))
+        mockMvc.perform(get(USERS_LONDON_PATH_V1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(stubUserJeff.getId())))
                 .andExpect(jsonPath("$[0].first_name", is(stubUserJeff.getFirstName())))

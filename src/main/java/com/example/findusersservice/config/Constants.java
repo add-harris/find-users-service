@@ -9,6 +9,6 @@ public class Constants {
         throw new AssertionError();
     }
 
-    public static final String LONDON_PATH_V1 = "/v1/london";
+    public static final String USERS_LONDON_PATH_V1 = "/v1/users/london";
 
 }

@@ -2,25 +2,31 @@ package com.example.findusersservice.services;
 
 import com.example.findusersservice.config.AppConfig;
 import com.example.findusersservice.models.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
 import static com.example.findusersservice.utils.TestFixtures.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UserServiceImplTest {
 
     private UserServiceImpl userService;
+    private AppConfig testAppConfig;
+    private WebClient testWebClient;
+    private AreaFilterService mockAreaFilterService;
 
-    private static WireMockServer wireMockServer = new WireMockServer();
+    private static final WireMockServer wireMockServer = new WireMockServer();
 
     private final String testBaseUrl = "http://localhost:8080";
     private final String testCityEndpoint = "/city/London/users";
@@ -39,9 +45,10 @@ class UserServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        AppConfig testAppConfig = new AppConfig(testBaseUrl, testCityEndpoint, testUsersEndpoint);
-        WebClient webClient = WebClient.builder().baseUrl(testBaseUrl).build();
-        this.userService = new UserServiceImpl(testAppConfig, webClient);
+        this.testAppConfig = new AppConfig(testBaseUrl, testCityEndpoint, testUsersEndpoint);
+        this.testWebClient = WebClient.builder().baseUrl(testBaseUrl).build();
+        this.mockAreaFilterService = mock(AreaFilterService.class);
+        this.userService = new UserServiceImpl(testAppConfig, testWebClient, mockAreaFilterService);
 
         wireMockServer.resetAll();
     }
@@ -51,11 +58,11 @@ class UserServiceImplTest {
         stubCityEndpoint();
         stubUserEndpoint();
         this.userService.getUsers();
-        verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
+        WireMock.verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
     }
 
     @Test
-    void returns_london_city_users () throws JsonProcessingException {
+    void returns_london_city_users () throws Exception {
 
         stubFor(get(testCityEndpoint).willReturn(ok()
                         .withHeader("Content-Type", APPLICATION_JSON)
@@ -66,7 +73,7 @@ class UserServiceImplTest {
 
         List<User> users = this.userService.getUsers();
 
-        verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
+        WireMock.verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
         assertEquals(stubUserJeff, users.get(0));
         assertEquals(stubUserBill, users.get(1));
     }
@@ -76,7 +83,23 @@ class UserServiceImplTest {
         stubCityEndpoint();
         stubUserEndpoint();
         this.userService.getUsers();
-        verify(1, getRequestedFor(urlEqualTo(testUsersEndpoint)));
+        WireMock.verify(1, getRequestedFor(urlEqualTo(testUsersEndpoint)));
+    }
+
+    @Test
+    void passes_results_from_user_endpoint_to_area_filter_service () throws Exception {
+        stubCityEndpoint();
+        stubFor(get(testUsersEndpoint).willReturn(ok()
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(centralLondonUsersJson())
+                )
+        );
+        given(mockAreaFilterService.getUsersWithinRadius(anyList())).willReturn(centralLondonUsers());
+
+        this.userService.getUsers();
+
+        WireMock.verify(1, getRequestedFor(urlEqualTo(testUsersEndpoint)));
+        Mockito.verify(mockAreaFilterService, times(1)).getUsersWithinRadius(centralLondonUsers());
     }
 
     private void stubCityEndpoint() {

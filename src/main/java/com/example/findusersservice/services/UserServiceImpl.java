@@ -13,12 +13,14 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private WebClient webClient;
-    private AppConfig appConfig;
+    private final WebClient webClient;
+    private final AppConfig appConfig;
+    private final AreaFilterService areaFilterService;
 
-    UserServiceImpl(AppConfig appConfig, WebClient webClient) {
+    UserServiceImpl(AppConfig appConfig, WebClient webClient, AreaFilterService areaFilterService) {
         this.appConfig = appConfig;
         this.webClient = webClient;
+        this.areaFilterService = areaFilterService;
     }
 
     @Override
@@ -28,7 +30,9 @@ public class UserServiceImpl implements UserService {
         log.info("making request to city endpoint for London users");
         var londonUsers = getLondonCityUsers().collectList().block();
 
-        var londonAreaUsers = getLondonAreaUsers().collectList().block();
+        var allUsers = getLondonAreaUsers().collectList().block();
+
+        var londonAreaUsers = areaFilterService.getUsersWithinRadius(allUsers);
 
         return londonUsers;
     }

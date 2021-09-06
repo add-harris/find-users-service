@@ -22,7 +22,12 @@ public class AreaFilterServiceImpl implements AreaFilterService {
     @Override
     public List<User> getUsersWithinArea(List<User> users) {
         return users.stream()
-                .filter(user -> calculateDistanceFromCenter(user.getLatitude(), user.getLongitude()) > searchAreaMiles)
+                .filter(user -> {
+                    log.info("checking user with id: {}", user.getId());
+                    double distance = calculateDistanceFromCenter(user.getLatitude(), user.getLongitude());
+                    log.info("distance from centre of london calculated at: {}", distance);
+                    return distance <= searchAreaMiles;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -43,10 +48,6 @@ public class AreaFilterServiceImpl implements AreaFilterService {
                         Math.cos(centreOfLondonLatitudeRadians);
 
         double c = 2 * Math.asin(Math.sqrt(a));
-
-        double distanceFromCentre = earthRadius * c;
-
-        log.info("distance from centre of london calculated at: {}", distanceFromCentre);
 
         return earthRadius * c;
     }

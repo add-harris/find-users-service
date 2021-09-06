@@ -74,8 +74,8 @@ class UserServiceImplTest {
         List<User> users = this.userService.getUsers();
 
         WireMock.verify(1, getRequestedFor(urlEqualTo(testCityEndpoint)));
-        assertEquals(stubUserJeff, users.get(0));
-        assertEquals(stubUserBill, users.get(1));
+        assertEquals(cityEndpointUser1, users.get(0));
+        assertEquals(cityEndpointUser2, users.get(1));
     }
 
     @Test
@@ -105,16 +105,28 @@ class UserServiceImplTest {
     @Test
     void returns_filtered_users_from_area_filter_service () throws Exception {
         stubCityEndpoint();
-        stubFor(get(testUsersEndpoint).willReturn(ok()
-                        .withHeader("Content-Type", APPLICATION_JSON)
-                        .withBody(centralLondonUsersJson())
-                )
-        );
+        stubUserEndpoint();
         given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(allLondonUsers());
 
         List<User> result = this.userService.getUsers();
 
         assertEquals(allLondonUsers(), result);
+    }
+
+    @Test
+    void returns_combined_list_users_from_both_city_endpoint_and_area_filter_service () throws Exception {
+        stubFor(get(testCityEndpoint).willReturn(ok()
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(basicStubbedUsersJson())
+                )
+        );
+        stubUserEndpoint();
+
+        given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(allLondonUsers());
+
+        List<User> result = this.userService.getUsers();
+
+        assertEquals(allExpectedLondonUsers(), result);
     }
 
     private void stubCityEndpoint() {

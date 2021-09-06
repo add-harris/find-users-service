@@ -68,7 +68,7 @@ class AreaFilterServiceImplTest {
 
     @Test
     void given_both_inside_and_outside_area_users_return_only_inside_users() {
-        assertEquals(allLondonUsers(), this.areaFilterService.getUsersWithinArea(allStubbedUsers()));
+        assertEquals(allLondonUsers(), this.areaFilterService.getUsersWithinArea(bothInisdeAndOutsideAreaUsers()));
     }
 
     private double calculateDistance(User user) {

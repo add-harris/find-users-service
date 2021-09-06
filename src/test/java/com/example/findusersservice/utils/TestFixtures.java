@@ -12,7 +12,7 @@ public class TestFixtures {
      * Generic stubbed users to be returned by the city endpoint "/city/London/users"
      */
 
-    public static final User stubUserJeff = new User(
+    public static final User cityEndpointUser1 = new User(
             1,
             "Jeff",
             "GoldBlum",
@@ -22,7 +22,7 @@ public class TestFixtures {
             51.535055
     );
 
-    public static final User stubUserBill = new User(
+    public static final User cityEndpointUser2 = new User(
             2,
             "Bill",
             "Murray",
@@ -97,8 +97,8 @@ public class TestFixtures {
         );
     }
 
-    public static List<User> basicStubbedUsers() {
-        return List.of(stubUserJeff, stubUserBill);
+    public static List<User> cityEndpointUsers() {
+        return List.of(cityEndpointUser1, cityEndpointUser2);
     }
 
     public static List<User> centralLondonUsers() {
@@ -114,16 +114,22 @@ public class TestFixtures {
         return List.of(outsideAreaUser1, outsideAreaUser2, outsideAreaUser3, outsideAreaUser4);
     }
 
-    public static List<User> allStubbedUsers() {
+    public static List<User> bothInisdeAndOutsideAreaUsers() {
         return List.of(centralLondonUser1, centralLondonUser2, centralLondonUser3,
                 outerLondonUser1, outerLondonUser2, outerLondonUser3, outerLondonUser4,
                 outsideAreaUser1, outsideAreaUser2, outsideAreaUser3, outsideAreaUser4);
     }
 
+    public static List<User> allExpectedLondonUsers() {
+        return List.of(cityEndpointUser1, cityEndpointUser2,
+                centralLondonUser1, centralLondonUser2, centralLondonUser3,
+                outerLondonUser1, outerLondonUser2, outerLondonUser3, outerLondonUser4);
+    }
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static String basicStubbedUsersJson() throws JsonProcessingException {
-        return objectMapper.writeValueAsString(basicStubbedUsers());
+        return objectMapper.writeValueAsString(cityEndpointUsers());
     }
 
     public static String centralLondonUsersJson() throws JsonProcessingException {

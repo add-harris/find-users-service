@@ -8,6 +8,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -36,7 +38,9 @@ public class UserServiceImpl implements UserService {
         log.info("filtering for only users within designated area of London");
         var londonAreaUsers = areaFilterService.getUsersWithinArea(allUsers);
 
-        return londonUsers;
+        return Stream.concat(londonUsers.stream(), londonAreaUsers.stream())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private Flux<User> getLondonCityUsers() {

@@ -31,7 +31,7 @@ class FindUsersControllerImplTest {
 
     @BeforeEach
     void setUp() {
-        given(mockUserService.getUsers()).willReturn(List.of(stubUserJeff, stubUserBill));
+        given(mockUserService.getUsers()).willReturn(List.of(cityEndpointUser1, cityEndpointUser2));
     }
 
     @Test
@@ -55,20 +55,20 @@ class FindUsersControllerImplTest {
 
         mockMvc.perform(get(USERS_LONDON_PATH_V1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(stubUserJeff.getId())))
-                .andExpect(jsonPath("$[0].first_name", is(stubUserJeff.getFirstName())))
-                .andExpect(jsonPath("$[0].last_name", is(stubUserJeff.getLastName())))
-                .andExpect(jsonPath("$[0].email", is(stubUserJeff.getEmail())))
-                .andExpect(jsonPath("$[0].ip_address", is(stubUserJeff.getIpAddress())))
-                .andExpect(jsonPath("$[0].longitude", is(stubUserJeff.getLongitude())))
-                .andExpect(jsonPath("$[0].latitude", is(stubUserJeff.getLatitude())))
-                .andExpect(jsonPath("$[1].id", is(stubUserBill.getId())))
-                .andExpect(jsonPath("$[1].first_name", is(stubUserBill.getFirstName())))
-                .andExpect(jsonPath("$[1].last_name", is(stubUserBill.getLastName())))
-                .andExpect(jsonPath("$[1].email", is(stubUserBill.getEmail())))
-                .andExpect(jsonPath("$[1].ip_address", is(stubUserBill.getIpAddress())))
-                .andExpect(jsonPath("$[1].longitude", is(stubUserBill.getLongitude())))
-                .andExpect(jsonPath("$[1].latitude", is(stubUserBill.getLatitude())));
+                .andExpect(jsonPath("$[0].id", is(cityEndpointUser1.getId())))
+                .andExpect(jsonPath("$[0].first_name", is(cityEndpointUser1.getFirstName())))
+                .andExpect(jsonPath("$[0].last_name", is(cityEndpointUser1.getLastName())))
+                .andExpect(jsonPath("$[0].email", is(cityEndpointUser1.getEmail())))
+                .andExpect(jsonPath("$[0].ip_address", is(cityEndpointUser1.getIpAddress())))
+                .andExpect(jsonPath("$[0].longitude", is(cityEndpointUser1.getLongitude())))
+                .andExpect(jsonPath("$[0].latitude", is(cityEndpointUser1.getLatitude())))
+                .andExpect(jsonPath("$[1].id", is(cityEndpointUser2.getId())))
+                .andExpect(jsonPath("$[1].first_name", is(cityEndpointUser2.getFirstName())))
+                .andExpect(jsonPath("$[1].last_name", is(cityEndpointUser2.getLastName())))
+                .andExpect(jsonPath("$[1].email", is(cityEndpointUser2.getEmail())))
+                .andExpect(jsonPath("$[1].ip_address", is(cityEndpointUser2.getIpAddress())))
+                .andExpect(jsonPath("$[1].longitude", is(cityEndpointUser2.getLongitude())))
+                .andExpect(jsonPath("$[1].latitude", is(cityEndpointUser2.getLatitude())));
 
     }
 

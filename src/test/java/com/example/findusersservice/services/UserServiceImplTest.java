@@ -102,6 +102,21 @@ class UserServiceImplTest {
         Mockito.verify(mockAreaFilterService, times(1)).getUsersWithinArea(centralLondonUsers());
     }
 
+    @Test
+    void returns_filtered_users_from_area_filter_service () throws Exception {
+        stubCityEndpoint();
+        stubFor(get(testUsersEndpoint).willReturn(ok()
+                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withBody(centralLondonUsersJson())
+                )
+        );
+        given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(allLondonUsers());
+
+        List<User> result = this.userService.getUsers();
+
+        assertEquals(allLondonUsers(), result);
+    }
+
     private void stubCityEndpoint() {
         stubFor(get(testCityEndpoint).willReturn(ok()));
     }

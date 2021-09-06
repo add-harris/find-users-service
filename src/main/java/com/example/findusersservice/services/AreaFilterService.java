@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface AreaFilterService {
 
-    public List<User> getUsersWithinRadius(List<User> users);
+    public List<User> getUsersWithinArea(List<User> users);
 
 }

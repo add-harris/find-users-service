@@ -94,12 +94,12 @@ class UserServiceImplTest {
                         .withBody(centralLondonUsersJson())
                 )
         );
-        given(mockAreaFilterService.getUsersWithinRadius(anyList())).willReturn(centralLondonUsers());
+        given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(centralLondonUsers());
 
         this.userService.getUsers();
 
         WireMock.verify(1, getRequestedFor(urlEqualTo(testUsersEndpoint)));
-        Mockito.verify(mockAreaFilterService, times(1)).getUsersWithinRadius(centralLondonUsers());
+        Mockito.verify(mockAreaFilterService, times(1)).getUsersWithinArea(centralLondonUsers());
     }
 
     private void stubCityEndpoint() {

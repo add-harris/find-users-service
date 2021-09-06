@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
         var allUsers = getLondonAreaUsers().collectList().block();
 
-        var londonAreaUsers = areaFilterService.getUsersWithinRadius(allUsers);
+        var londonAreaUsers = areaFilterService.getUsersWithinArea(allUsers);
 
         return londonUsers;
     }

@@ -22,13 +22,17 @@ public class AreaFilterServiceImpl implements AreaFilterService {
     @Override
     public List<User> getUsersWithinArea(List<User> users) {
         return users.stream()
-                .filter(user -> {
-                    log.info("checking user with id: {}", user.getId());
-                    double distance = calculateDistanceFromCenter(user.getLatitude(), user.getLongitude());
-                    log.info("distance from centre of london calculated at: {}", distance);
-                    return distance <= searchAreaMiles;
-                })
+                .filter(this::isWithinArea)
                 .collect(Collectors.toList());
+    }
+
+    private boolean isWithinArea(User user) {
+        log.info("checking user with id: {}", user.getId());
+
+        double distance = calculateDistanceFromCenter(user.getLatitude(), user.getLongitude());
+        log.info("distance from centre of london calculated at: {}", distance);
+
+        return distance <= searchAreaMiles;
     }
 
     double calculateDistanceFromCenter(double userLatitude, double userLongitude) {

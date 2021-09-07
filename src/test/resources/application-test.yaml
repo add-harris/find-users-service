@@ -1,0 +1,13 @@
+
+spring:
+  application:
+    name: find-users-service
+
+server:
+  servlet:
+    context-path: /find-users
+
+application:
+  base-backend-url: http://localhost:8080
+  city-endpoint: /city/London/users
+  users-endpoint: /users

@@ -2,10 +2,8 @@ package com.example.findusersservice.services;
 
 import com.example.findusersservice.config.AppConfig;
 import com.example.findusersservice.models.User;
-import com.github.tomakehurst.wiremock.WireMockServer;
+import com.example.findusersservice.utils.WireMockTest;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -15,38 +13,22 @@ import java.util.List;
 
 import static com.example.findusersservice.utils.TestFixtures.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class UserServiceImplTest {
+
+class UserServiceImplTest extends WireMockTest {
 
     private UserServiceImpl userService;
     private AppConfig testAppConfig;
     private WebClient testWebClient;
     private AreaFilterService mockAreaFilterService;
 
-    private static final WireMockServer wireMockServer = new WireMockServer();
-
-    private final String testBaseUrl = "http://localhost:8080";
-    private final String testCityEndpoint = "/city/London/users";
-    private final String testUsersEndpoint = "/users";
-    private final String APPLICATION_JSON = "application/json";
-
-    @BeforeAll
-    private static void beforeAll() {
-        wireMockServer.start();
-    }
-
-    @AfterAll
-    private static void afterAll() {
-        wireMockServer.stop();
-    }
-
     @BeforeEach
-    void setUp() {
-        this.testAppConfig = new AppConfig(testBaseUrl, testCityEndpoint, testUsersEndpoint);
-        this.testWebClient = WebClient.builder().baseUrl(testBaseUrl).build();
+    protected void setUp() {
+        this.testAppConfig = new AppConfig(testApiBaseUrl, testCityEndpoint, testUsersEndpoint);
+        this.testWebClient = WebClient.builder().baseUrl(testApiBaseUrl).build();
         this.mockAreaFilterService = mock(AreaFilterService.class);
         this.userService = new UserServiceImpl(testAppConfig, testWebClient, mockAreaFilterService);
 
@@ -127,14 +109,6 @@ class UserServiceImplTest {
         List<User> result = this.userService.getUsers();
 
         assertEquals(allExpectedLondonUsers(), result);
-    }
-
-    private void stubCityEndpoint() {
-        stubFor(get(testCityEndpoint).willReturn(ok()));
-    }
-
-    private void stubUserEndpoint() {
-        stubFor(get(testUsersEndpoint).willReturn(ok()));
     }
 
 }

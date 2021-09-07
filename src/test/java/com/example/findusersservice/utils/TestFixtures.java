@@ -9,6 +9,15 @@ import java.util.List;
 public class TestFixtures {
 
     /**
+     * Test Constants
+     */
+
+    public static final String testApiBaseUrl = "http://localhost:8080";
+    public static final String testCityEndpoint = "/city/London/users";
+    public static final String testUsersEndpoint = "/users";
+    public static final String APPLICATION_JSON = "application/json";
+
+    /**
      * Generic stubbed users to be returned by the city endpoint "/city/London/users"
      */
 

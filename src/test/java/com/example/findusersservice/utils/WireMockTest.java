@@ -1,5 +1,6 @@
 package com.example.findusersservice.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,6 +34,22 @@ public abstract class WireMockTest {
 
     public void stubUserEndpoint() {
         stubFor(get(testUsersEndpoint).willReturn(ok()));
+    }
+
+    public void stubCityEndpointWithResponse(String body) {
+        stubEndpointWithResponse(testCityEndpoint, body);
+    }
+
+    public void stubUserEndpointWithResponse(String body) {
+        stubEndpointWithResponse(testUsersEndpoint, body);
+    }
+
+    public void stubEndpointWithResponse(String endpoint, String body) {
+        stubFor(get(endpoint).willReturn(ok()
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON)
+                        .withBody(body)
+                )
+        );
     }
 
 }

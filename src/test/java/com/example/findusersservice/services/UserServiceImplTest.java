@@ -46,12 +46,7 @@ class UserServiceImplTest extends WireMockTest {
 
     @Test
     void returns_london_city_users () throws Exception {
-
-        stubFor(get(testCityEndpoint).willReturn(ok()
-                        .withHeader(CONTENT_TYPE, APPLICATION_JSON)
-                        .withBody(basicStubbedUsersJson())
-                )
-        );
+        stubCityEndpointWithResponse(basicStubbedUsersJson());
         stubUserEndpoint();
 
         List<User> users = this.userService.getUsers();
@@ -72,11 +67,7 @@ class UserServiceImplTest extends WireMockTest {
     @Test
     void passes_results_from_user_endpoint_to_area_filter_service () throws Exception {
         stubCityEndpoint();
-        stubFor(get(testUsersEndpoint).willReturn(ok()
-                        .withHeader(CONTENT_TYPE, APPLICATION_JSON)
-                        .withBody(centralLondonUsersJson())
-                )
-        );
+        stubUserEndpointWithResponse(centralLondonUsersJson());
         given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(centralLondonUsers());
 
         this.userService.getUsers();
@@ -98,11 +89,7 @@ class UserServiceImplTest extends WireMockTest {
 
     @Test
     void returns_combined_list_users_from_both_city_endpoint_and_area_filter_service () throws Exception {
-        stubFor(get(testCityEndpoint).willReturn(ok()
-                        .withHeader(CONTENT_TYPE, APPLICATION_JSON)
-                        .withBody(basicStubbedUsersJson())
-                )
-        );
+        stubCityEndpointWithResponse(basicStubbedUsersJson());
         stubUserEndpoint();
 
         given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(allLondonUsers());

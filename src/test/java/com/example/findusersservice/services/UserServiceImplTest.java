@@ -7,17 +7,14 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.core.codec.DecodingException;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
 
 import java.util.List;
 
 import static com.example.findusersservice.utils.TestFixtures.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -108,7 +105,7 @@ class UserServiceImplTest extends WireMockTest {
         stubForErrorStatus(testCityEndpoint, 500);
         stubUserEndpoint();
 
-        Exception exception = assertThrows(WebClientException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             this.userService.getUsers();
         });
 
@@ -121,7 +118,7 @@ class UserServiceImplTest extends WireMockTest {
         stubForErrorStatus(testCityEndpoint, 404);
         stubUserEndpoint();
 
-        Exception exception = assertThrows(WebClientException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             this.userService.getUsers();
         });
 
@@ -134,12 +131,12 @@ class UserServiceImplTest extends WireMockTest {
         stubEndpointWithFileResponse(testCityEndpoint, "malformedUser.json");
         stubUserEndpoint();
 
-        Exception exception = assertThrows(DecodingException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             this.userService.getUsers();
         });
 
-        String expectedMessage = "JSON decoding error: Cannot deserialize value of type `double` from String \"0.1272° W\": not a valid `double` value (as String to convert);";
-        assertTrue(exception.getMessage().contains(expectedMessage));
+        String expectedMessageSnippet = "JSON decoding error: Cannot deserialize value of type `double` from String \"0.1272° W\": not a valid `double` value (as String to convert);";
+        assertTrue(exception.getMessage().contains(expectedMessageSnippet));
     }
 
     @Test
@@ -147,12 +144,12 @@ class UserServiceImplTest extends WireMockTest {
         stubCityEndpointWithResponse("{,]}");
         stubUserEndpoint();
 
-        Exception exception = assertThrows(DecodingException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             this.userService.getUsers();
         });
 
-        String expectedMessage = "JSON decoding error: Unexpected character (',' (code 44)): was expecting double-quote to start field name;";
-        assertTrue(exception.getMessage().contains(expectedMessage));
+        String expectedMessageSnippet = "JSON decoding error: Unexpected character (',' (code 44)): was expecting double-quote to start field name;";
+        assertTrue(exception.getMessage().contains(expectedMessageSnippet));
     }
 
 }

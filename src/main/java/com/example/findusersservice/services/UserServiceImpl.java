@@ -55,7 +55,8 @@ public class UserServiceImpl implements UserService {
         return this.webClient.get()
                 .uri(endpoint)
                 .retrieve()
-                .bodyToFlux(User.class);
+                .bodyToFlux(User.class)
+                .onErrorResume(error -> Flux.error(new RuntimeException(error.getMessage(), error)));
     }
 
 }

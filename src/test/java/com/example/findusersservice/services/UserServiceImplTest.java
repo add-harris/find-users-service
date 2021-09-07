@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.core.codec.DecodingException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
 
@@ -16,6 +17,7 @@ import static com.example.findusersservice.utils.TestFixtures.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -97,6 +99,58 @@ class UserServiceImplTest extends WireMockTest {
         List<User> result = this.userService.getUsers();
 
         assertEquals(allExpectedLondonUsers(), result);
+    }
+
+    @Test
+    void handles_500_error_returned_from_city_endpoint () throws Exception {
+        stubForErrorStatus(testCityEndpoint, 500);
+        stubUserEndpoint();
+
+        Exception exception = assertThrows(WebClientException.class, () -> {
+            this.userService.getUsers();
+        });
+
+        String expectedMessage = "500 Internal Server Error from GET http://localhost:8080/city/London/users";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    void handles_404_error_returned_from_city_endpoint () throws Exception {
+        stubForErrorStatus(testCityEndpoint, 404);
+        stubUserEndpoint();
+
+        Exception exception = assertThrows(WebClientException.class, () -> {
+            this.userService.getUsers();
+        });
+
+        String expectedMessage = "404 Not Found from GET http://localhost:8080/city/London/users";
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    void handles_malformed_json_returned_from_city_endpoint () throws Exception {
+        stubEndpointWithFileResponse(testCityEndpoint, "malformedUser.json");
+        stubUserEndpoint();
+
+        Exception exception = assertThrows(DecodingException.class, () -> {
+            this.userService.getUsers();
+        });
+
+        String expectedMessage = "JSON decoding error: Cannot deserialize value of type `double` from String \"0.1272° W\": not a valid `double` value (as String to convert);";
+        assertTrue(exception.getMessage().contains(expectedMessage));
+    }
+
+    @Test
+    void handles_garbage_json_returned_from_city_endpoint () throws Exception {
+        stubCityEndpointWithResponse("{,]}");
+        stubUserEndpoint();
+
+        Exception exception = assertThrows(DecodingException.class, () -> {
+            this.userService.getUsers();
+        });
+
+        String expectedMessage = "JSON decoding error: Unexpected character (',' (code 44)): was expecting double-quote to start field name;";
+        assertTrue(exception.getMessage().contains(expectedMessage));
     }
 
 }

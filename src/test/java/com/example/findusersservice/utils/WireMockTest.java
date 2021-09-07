@@ -47,9 +47,17 @@ public abstract class WireMockTest {
     public void stubEndpointWithResponse(String endpoint, String body) {
         stubFor(get(endpoint).willReturn(ok()
                         .withHeader(CONTENT_TYPE, APPLICATION_JSON)
-                        .withBody(body)
-                )
-        );
+                        .withBody(body)));
+    }
+
+    public void stubForErrorStatus(String endpoint, int status) {
+        stubFor(get(endpoint).willReturn(status(status)));
+    }
+
+    public void stubEndpointWithFileResponse(String endpoint, String filePath) {
+        stubFor(get(endpoint).willReturn(ok()
+                .withHeader(CONTENT_TYPE, APPLICATION_JSON)
+                .withBodyFile(filePath)));
     }
 
 }

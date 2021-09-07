@@ -6,7 +6,7 @@ import com.example.findusersservice.utils.WireMockTest;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.InOrder;
 import org.springframework.core.codec.DecodingException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -67,22 +67,25 @@ class UserServiceImplTest extends WireMockTest {
     }
 
     @Test
-    void passes_results_from_user_endpoint_to_area_filter_service () throws Exception {
+    void checks_each_user_from_user_endpoint_is_within_area () throws Exception {
         stubCityEndpoint();
         stubUserEndpointWithResponse(centralLondonUsersJson());
-        given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(centralLondonUsers());
+        given(mockAreaFilterService.isWithinArea(any(User.class))).willReturn(true);
 
         this.userService.getUsers();
 
         WireMock.verify(1, getRequestedFor(urlEqualTo(testUsersEndpoint)));
-        Mockito.verify(mockAreaFilterService, times(1)).getUsersWithinArea(centralLondonUsers());
+        InOrder inOrder = inOrder(mockAreaFilterService);
+        inOrder.verify(mockAreaFilterService).isWithinArea(centralLondonUser1);
+        inOrder.verify(mockAreaFilterService).isWithinArea(centralLondonUser2);
+        inOrder.verify(mockAreaFilterService).isWithinArea(centralLondonUser3);
     }
 
     @Test
     void returns_filtered_users_from_area_filter_service () throws Exception {
         stubCityEndpoint();
-        stubUserEndpoint();
-        given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(allLondonUsers());
+        stubUserEndpointWithResponse(allLondonUsersJson());
+        given(mockAreaFilterService.isWithinArea(any(User.class))).willReturn(true);
 
         List<User> result = this.userService.getUsers();
 
@@ -92,9 +95,8 @@ class UserServiceImplTest extends WireMockTest {
     @Test
     void returns_combined_list_users_from_both_city_endpoint_and_area_filter_service () throws Exception {
         stubCityEndpointWithResponse(basicStubbedUsersJson());
-        stubUserEndpoint();
-
-        given(mockAreaFilterService.getUsersWithinArea(anyList())).willReturn(allLondonUsers());
+        stubUserEndpointWithResponse(allLondonUsersJson());
+        given(mockAreaFilterService.isWithinArea(any(User.class))).willReturn(true);
 
         List<User> result = this.userService.getUsers();
 

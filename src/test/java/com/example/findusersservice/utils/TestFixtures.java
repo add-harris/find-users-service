@@ -146,4 +146,8 @@ public class TestFixtures {
         return objectMapper.writeValueAsString(centralLondonUsers());
     }
 
+    public static String allLondonUsersJson() throws JsonProcessingException {
+        return objectMapper.writeValueAsString(allLondonUsers());
+    }
+
 }

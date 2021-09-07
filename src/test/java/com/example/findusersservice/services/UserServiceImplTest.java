@@ -6,7 +6,7 @@ import com.example.findusersservice.utils.WireMockTest;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
+import org.mockito.Mockito;
 import org.springframework.core.codec.DecodingException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientException;
@@ -75,10 +75,10 @@ class UserServiceImplTest extends WireMockTest {
         this.userService.getUsers();
 
         WireMock.verify(1, getRequestedFor(urlEqualTo(testUsersEndpoint)));
-        InOrder inOrder = inOrder(mockAreaFilterService);
-        inOrder.verify(mockAreaFilterService).isWithinArea(centralLondonUser1);
-        inOrder.verify(mockAreaFilterService).isWithinArea(centralLondonUser2);
-        inOrder.verify(mockAreaFilterService).isWithinArea(centralLondonUser3);
+
+        Mockito.verify(mockAreaFilterService, times(1)).isWithinArea(centralLondonUser1);
+        Mockito.verify(mockAreaFilterService, times(1)).isWithinArea(centralLondonUser2);
+        Mockito.verify(mockAreaFilterService, times(1)).isWithinArea(centralLondonUser3);
     }
 
     @Test

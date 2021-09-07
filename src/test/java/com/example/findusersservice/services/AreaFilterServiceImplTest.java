@@ -4,10 +4,8 @@ import com.example.findusersservice.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static com.example.findusersservice.utils.TestFixtures.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AreaFilterServiceImplTest {
 
@@ -57,18 +55,17 @@ class AreaFilterServiceImplTest {
     }
 
     @Test
-    void given_users_that_are_within_50_miles_return_them() {
-        assertEquals(allLondonUsers(), this.areaFilterService.getUsersWithinArea(allLondonUsers()));
+    void given_users_that_are_within_50_miles_return_true() {
+        allLondonUsers().forEach(user -> {
+            assertTrue(this.areaFilterService.isWithinArea(user));
+        });
     }
 
     @Test
-    void given_users_that_are_outside_50_miles_exclude_them() {
-        assertEquals(List.of(), this.areaFilterService.getUsersWithinArea(outsideLondonUsers()));
-    }
-
-    @Test
-    void given_both_inside_and_outside_area_users_return_only_inside_users() {
-        assertEquals(allLondonUsers(), this.areaFilterService.getUsersWithinArea(bothInisdeAndOutsideAreaUsers()));
+    void given_users_that_are_outside_50_miles_return_false() {
+        outsideLondonUsers().forEach(user -> {
+            assertFalse(this.areaFilterService.isWithinArea(user));
+        });
     }
 
     private double calculateDistance(User user) {

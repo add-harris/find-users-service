@@ -15,6 +15,7 @@ public class TestFixtures {
     public static final String testApiBaseUrl = "http://localhost:8080";
     public static final String testCityEndpoint = "/city/London/users";
     public static final String testUsersEndpoint = "/users";
+    public static final String CONTENT_TYPE = "Content-Type";
     public static final String APPLICATION_JSON = "application/json";
 
     /**

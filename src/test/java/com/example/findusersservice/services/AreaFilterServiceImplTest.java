@@ -62,7 +62,7 @@ class AreaFilterServiceImplTest {
     }
 
     @Test
-    void given_users_that_outside_50_miles_exclude_them() {
+    void given_users_that_are_outside_50_miles_exclude_them() {
         assertEquals(List.of(), this.areaFilterService.getUsersWithinArea(outsideLondonUsers()));
     }
 

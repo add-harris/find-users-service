@@ -8,27 +8,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 
 import java.util.List;
 
 import static com.example.findusersservice.utils.TestFixtures.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+
 
 
 class UserServiceImplTest extends WireMockTest {
 
     private UserServiceImpl userService;
-    private AppConfig testAppConfig;
-    private WebClient testWebClient;
     private AreaFilterService mockAreaFilterService;
 
     @BeforeEach
     protected void setUp() {
-        this.testAppConfig = new AppConfig(testApiBaseUrl, testCityEndpoint, testUsersEndpoint);
-        this.testWebClient = WebClient.builder().baseUrl(testApiBaseUrl).build();
+        AppConfig testAppConfig = new AppConfig(testApiBaseUrl, testCityEndpoint, testUsersEndpoint);
+        WebClient testWebClient = WebClient.builder().baseUrl(testApiBaseUrl).build();
         this.mockAreaFilterService = mock(AreaFilterService.class);
         this.userService = new UserServiceImpl(testAppConfig, testWebClient, mockAreaFilterService);
 
@@ -47,7 +48,7 @@ class UserServiceImplTest extends WireMockTest {
     void returns_london_city_users () throws Exception {
 
         stubFor(get(testCityEndpoint).willReturn(ok()
-                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON)
                         .withBody(basicStubbedUsersJson())
                 )
         );
@@ -72,7 +73,7 @@ class UserServiceImplTest extends WireMockTest {
     void passes_results_from_user_endpoint_to_area_filter_service () throws Exception {
         stubCityEndpoint();
         stubFor(get(testUsersEndpoint).willReturn(ok()
-                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON)
                         .withBody(centralLondonUsersJson())
                 )
         );
@@ -98,7 +99,7 @@ class UserServiceImplTest extends WireMockTest {
     @Test
     void returns_combined_list_users_from_both_city_endpoint_and_area_filter_service () throws Exception {
         stubFor(get(testCityEndpoint).willReturn(ok()
-                        .withHeader("Content-Type", APPLICATION_JSON)
+                        .withHeader(CONTENT_TYPE, APPLICATION_JSON)
                         .withBody(basicStubbedUsersJson())
                 )
         );

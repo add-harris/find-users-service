@@ -26,7 +26,8 @@ public class AreaFilterServiceImpl implements AreaFilterService {
                 .collect(Collectors.toList());
     }
 
-    private boolean isWithinArea(User user) {
+    @Override
+    public boolean isWithinArea(User user) {
         log.info("checking user with id: {}", user.getId());
 
         double distance = calculateDistanceFromCenter(user.getLatitude(), user.getLongitude());

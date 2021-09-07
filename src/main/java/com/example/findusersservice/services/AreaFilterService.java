@@ -8,4 +8,6 @@ public interface AreaFilterService {
 
     public List<User> getUsersWithinArea(List<User> users);
 
+    public boolean isWithinArea(User user);
+
 }

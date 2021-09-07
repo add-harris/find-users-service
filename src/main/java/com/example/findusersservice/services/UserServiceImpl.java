@@ -3,8 +3,12 @@ package com.example.findusersservice.services;
 import com.example.findusersservice.config.AppConfig;
 import com.example.findusersservice.models.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,34 +36,31 @@ public class UserServiceImpl implements UserService {
         log.info("getting users");
 
         log.info("making request to city endpoint {} for London users", cityApiEndpoint);
-        List<User> londonUsers = getLondonCityUsers();
+        Flux<User> londonUsers = getLondonCityUsers();
 
         log.info("making request to users endpoint {} for all users", userApiEndpoint);
-        List<User> allUsers = getLondonAreaUsers();
+        Flux<User> allUsers = getLondonAreaUsers();
 
         log.info("filtering for only users within designated area");
-        List<User> londonAreaUsers = areaFilterService.getUsersWithinArea(allUsers);
+        Flux<User> londonAreaUsers = allUsers.filter(areaFilterService::isWithinArea);
 
-        return Stream.concat(londonUsers.stream(), londonAreaUsers.stream())
-                .distinct()
-                .collect(Collectors.toList());
+        return Flux.mergeSequential(londonUsers, londonAreaUsers).collectList().block();
+
     }
 
-    private List<User> getLondonCityUsers() {
+    private Flux<User> getLondonCityUsers() {
         return getUsersApiCall(cityApiEndpoint);
     }
 
-    private List<User> getLondonAreaUsers() {
+    private Flux<User> getLondonAreaUsers() {
         return getUsersApiCall(userApiEndpoint);
     }
 
-    private List<User> getUsersApiCall(String endpoint) {
+    private Flux<User> getUsersApiCall(String endpoint) {
         return this.webClient.get()
                 .uri(endpoint)
                 .retrieve()
-                .bodyToFlux(User.class)
-                .collectList()
-                .block();
+                .bodyToFlux(User.class);
     }
 
 }

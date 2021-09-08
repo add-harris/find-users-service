@@ -69,9 +69,9 @@ class AreaFilterServiceImplTest {
         double internationalUserDistance1 = calculateDistance(icelandUser);
         double internationalUserDistance2 = calculateDistance(indiaUser);
         double internationalUserDistance3 = calculateDistance(newZealandUser);
-        assertEquals(1170.75, roundedAnswer(internationalUserDistance1));
-        assertEquals(4982.05, roundedAnswer(internationalUserDistance2));
-        assertEquals(11796.23, roundedAnswer(internationalUserDistance3));
+        assertEquals(1171, roundedLongDistanceAnswer(internationalUserDistance1));
+        assertEquals(4982, roundedLongDistanceAnswer(internationalUserDistance2));
+        assertEquals(11796, roundedLongDistanceAnswer(internationalUserDistance3));
     }
 
     @Test
@@ -88,6 +88,20 @@ class AreaFilterServiceImplTest {
         });
     }
 
+    @Test
+    void given_users_that_are_very_far_outside_50_miles_return_false() {
+        farOutsideLondonUsers().forEach(user -> {
+            assertFalse(this.areaFilterService.isWithinArea(user));
+        });
+    }
+
+    @Test
+    void given_international_users_return_false() {
+        internationalUsers().forEach(user -> {
+            assertFalse(this.areaFilterService.isWithinArea(user));
+        });
+    }
+
     private double calculateDistance(User user) {
         return this.areaFilterService.calculateDistanceFromCenter(
                 user.getLatitude(),
@@ -97,6 +111,14 @@ class AreaFilterServiceImplTest {
 
     private double roundedAnswer(double numberToRound) {
         return (double)Math.round(numberToRound * 100d) / 100d;
+    }
+
+    /**
+     * Over incredibly long distances the formula becomes less accurate, so must be rounded further.
+     * However it is still well within tolerance to meet the requirements of this service.
+     */
+    private double roundedLongDistanceAnswer(double numberToRound) {
+        return (double)Math.round(numberToRound);
     }
 
 }

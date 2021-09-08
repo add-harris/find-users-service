@@ -47,12 +47,15 @@ public class TestFixtures {
      */
 
     // Distance 0.82445 miles from centre
+    // coordinates 51.496436, -0.135364
     public static final User centralLondonUser1 = stubUserGenerator(3, -0.135364, 51.496436);
 
     // Distance 0.85065 miles from centre
+    // coordinates 51.502293, -0.109803
     public static final User centralLondonUser2 = stubUserGenerator(4, -0.109803, 51.502293);
 
     // Distance 0.88557 miles from centre
+    // coordinates 51.518145, -0.116573
     public static final User centralLondonUser3 = stubUserGenerator(5, -0.116573, 51.518145);
 
     /**
@@ -155,6 +158,14 @@ public class TestFixtures {
 
     public static List<User> outsideLondonUsers() {
         return List.of(outsideAreaUser1, outsideAreaUser2, outsideAreaUser3, outsideAreaUser4);
+    }
+
+    public static List<User> farOutsideLondonUsers() {
+        return List.of(northernIrelandUser, scotlandUser, southWestUser);
+    }
+
+    public static List<User> internationalUsers() {
+        return List.of(icelandUser, indiaUser, newZealandUser);
     }
 
     public static List<User> bothInisdeAndOutsideAreaUsers() {

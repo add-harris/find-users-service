@@ -115,20 +115,20 @@ class UserServiceImplTest extends WireMockTest {
 
     @Test
     void handles_404_error_returned_from_city_endpoint () throws Exception {
-        stubForErrorStatus(testCityEndpoint, 404);
-        stubUserEndpoint();
+        stubCityEndpoint();
+        stubForErrorStatus(testUsersEndpoint, 404);
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             this.userService.getUsers();
         });
 
-        String expectedMessage = "404 Not Found from GET http://localhost:8080/city/London/users";
+        String expectedMessage = "404 Not Found from GET http://localhost:8080/users";
         assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
-    void handles_malformed_json_returned_from_city_endpoint () throws Exception {
-        stubEndpointWithFileResponse(testCityEndpoint, "malformedUser.json");
+    void handles_malformed_json_returned_from_backend_endpoint () throws Exception {
+        stubEndpointWithFileResponse(testCityEndpoint, MALFORMED_USERS_FILE_PATH);
         stubUserEndpoint();
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
@@ -140,9 +140,9 @@ class UserServiceImplTest extends WireMockTest {
     }
 
     @Test
-    void handles_garbage_json_returned_from_city_endpoint () throws Exception {
-        stubCityEndpointWithResponse("{,]}");
-        stubUserEndpoint();
+    void handles_garbage_json_returned_from_backend_endpoint () throws Exception {
+        stubCityEndpoint();
+        stubUserEndpointWithResponse("{,]}");
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             this.userService.getUsers();

@@ -20,6 +20,8 @@ public class TestFixtures {
     public static final String testUsersEndpoint = "/users";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String APPLICATION_JSON = "application/json";
+    public static final String MALFORMED_USERS_FILE_PATH = "malformedUser.json";
+
 
     /**
      * Generic stubbed users to be returned by the city endpoint "/city/London/users"

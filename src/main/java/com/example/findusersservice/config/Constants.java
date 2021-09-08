@@ -7,6 +7,7 @@ public class Constants {
      */
 
     public static final String USERS_LONDON_PATH_V1 = "/v1/users/london";
+    public static final String APPLICATION_JSON = "application/json";
 
     /**
      * Error Constants

@@ -45,7 +45,7 @@ class UserServiceImplTest extends WireMockTest {
 
     @Test
     void returns_london_city_users () throws Exception {
-        stubCityEndpointWithResponse(basicStubbedUsersJson());
+        stubCityEndpointWithResponse(cityEndpointUsersJson());
         stubUserEndpoint();
 
         List<User> users = this.userService.getUsers();
@@ -91,7 +91,7 @@ class UserServiceImplTest extends WireMockTest {
 
     @Test
     void returns_combined_list_users_from_both_city_endpoint_and_area_filter_service () throws Exception {
-        stubCityEndpointWithResponse(basicStubbedUsersJson());
+        stubCityEndpointWithResponse(cityEndpointUsersJson());
         stubUserEndpointWithResponse(allLondonUsersJson());
         given(mockAreaFilterService.isWithinArea(any(User.class))).willReturn(true);
 

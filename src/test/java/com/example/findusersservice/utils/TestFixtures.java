@@ -182,7 +182,7 @@ public class TestFixtures {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static String basicStubbedUsersJson() throws JsonProcessingException {
+    public static String cityEndpointUsersJson() throws JsonProcessingException {
         return objectMapper.writeValueAsString(cityEndpointUsers());
     }
 

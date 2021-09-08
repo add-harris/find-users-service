@@ -17,8 +17,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = FindUsersController.class)
 class FindUsersControllerImplTest {
@@ -38,6 +37,15 @@ class FindUsersControllerImplTest {
     void controller_returns_200_response_on_GET() throws Exception {
 
         mockMvc.perform(get(USERS_LONDON_PATH_V1)).andExpect(status().isOk());
+
+    }
+
+    @Test
+    void controller_returns_content_type_application_json() throws Exception {
+
+        mockMvc.perform(get(USERS_LONDON_PATH_V1))
+                .andExpect(status().isOk())
+                .andExpect(header().stringValues(CONTENT_TYPE, APPLICATION_JSON));
 
     }
 

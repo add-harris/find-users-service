@@ -14,6 +14,15 @@ public class Constants {
     public static final String API_TAG = "Find User";
 
     /**
+     * Formula Constants
+     */
+
+    public static final double searchAreaMiles = 50;
+    public static final double centreOfLondonLatitude = 51.5074;
+    public static final double centreOfLondonLongitude = -0.1278;
+    public static final double earthRadiusMiles = 3958.8;
+
+    /**
      * Error Constants
      */
 

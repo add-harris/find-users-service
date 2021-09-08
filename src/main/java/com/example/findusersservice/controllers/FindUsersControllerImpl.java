@@ -19,7 +19,7 @@ import static com.example.findusersservice.config.Constants.*;
 @Tag(name = API_TAG, description = API_DESCRIPTION)
 public class FindUsersControllerImpl implements FindUsersController {
 
-    UserService userService;
+    private final UserService userService;
 
     FindUsersControllerImpl(UserService userService) {
         this.userService = userService;

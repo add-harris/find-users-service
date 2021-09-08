@@ -5,16 +5,12 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import static com.example.findusersservice.config.Constants.*;
 
 @Service
 @Slf4j
 @NoArgsConstructor
 public class AreaFilterServiceImpl implements AreaFilterService {
-
-    private static final double searchAreaMiles = 50;
-    private static final double centreOfLondonLatitude = 51.5074;
-    private static final double centreOfLondonLongitude = -0.1278;
-    private static final double earthRadiusMiles = 3958.8;
 
     @Override
     public boolean isWithinArea(User user) {

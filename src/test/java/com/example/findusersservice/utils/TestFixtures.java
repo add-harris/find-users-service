@@ -4,7 +4,10 @@ import com.example.findusersservice.models.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TestFixtures {
 
@@ -168,10 +171,14 @@ public class TestFixtures {
         return List.of(icelandUser, indiaUser, newZealandUser);
     }
 
-    public static List<User> bothInisdeAndOutsideAreaUsers() {
-        return List.of(centralLondonUser1, centralLondonUser2, centralLondonUser3,
-                outerLondonUser1, outerLondonUser2, outerLondonUser3, outerLondonUser4,
-                outsideAreaUser1, outsideAreaUser2, outsideAreaUser3, outsideAreaUser4);
+    public static List<User> allOutsideOfAreaUsers() {
+        return List.of(outsideAreaUser1, outsideAreaUser2, outsideAreaUser3, outsideAreaUser4,
+                northernIrelandUser, scotlandUser, southWestUser,
+                icelandUser, indiaUser, newZealandUser);
+    }
+
+    public static List<User> allInsideAndOutsideAreaUsers() {
+        return Stream.concat(allLondonUsers().stream(), allOutsideOfAreaUsers().stream()).collect(Collectors.toList());
     }
 
     public static List<User> allExpectedLondonUsers() {
@@ -192,6 +199,10 @@ public class TestFixtures {
 
     public static String allLondonUsersJson() throws JsonProcessingException {
         return objectMapper.writeValueAsString(allLondonUsers());
+    }
+
+    public static String allInsideAndOutsideAreaUsersJson() throws JsonProcessingException {
+        return objectMapper.writeValueAsString(allInsideAndOutsideAreaUsers());
     }
 
 }

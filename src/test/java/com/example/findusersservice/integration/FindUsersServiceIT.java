@@ -37,7 +37,7 @@ public class FindUsersServiceIT extends WireMockTest {
 
 
     @Test
-    void application_returns_200_response_on_GET() throws Exception {
+    void application_returns_ok_response_on_GET() throws Exception {
         stubCityEndpoint();
         stubUserEndpoint();
 
@@ -49,7 +49,7 @@ public class FindUsersServiceIT extends WireMockTest {
     }
 
     @Test
-    void application_returns_user_retrieved_from_city_endpoint() throws Exception {
+    void application_returns_users_retrieved_from_city_endpoint() throws Exception {
         stubCityEndpointWithResponse(cityEndpointUsersJson());
         stubUserEndpoint();
 
@@ -59,6 +59,47 @@ public class FindUsersServiceIT extends WireMockTest {
                 .expectBodyList(User.class)
                 .contains(cityEndpointUser1)
                 .contains(cityEndpointUser2);
+
+    }
+
+    @Test
+    void application_only_returns_users_within_range_from_user_endpoint() throws Exception {
+        stubCityEndpoint();
+        stubUserEndpointWithResponse(allInsideAndOutsideAreaUsersJson());
+
+        callApplication()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(User.class)
+                .contains(centralLondonUser1)
+                .contains(centralLondonUser2)
+                .contains(centralLondonUser3)
+                .contains(outerLondonUser1)
+                .contains(outerLondonUser2)
+                .contains(outerLondonUser3)
+                .contains(outerLondonUser4);
+
+    }
+
+    @Test
+    void application_does_not_return_users_out_of_range_from_user_endpoint() throws Exception {
+        stubCityEndpoint();
+        stubUserEndpointWithResponse(allInsideAndOutsideAreaUsersJson());
+
+        callApplication()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(User.class)
+                .doesNotContain(outsideAreaUser1)
+                .doesNotContain(outsideAreaUser2)
+                .doesNotContain(outsideAreaUser3)
+                .doesNotContain(outsideAreaUser4)
+                .doesNotContain(northernIrelandUser)
+                .doesNotContain(scotlandUser)
+                .doesNotContain(southWestUser)
+                .doesNotContain(icelandUser)
+                .doesNotContain(indiaUser)
+                .doesNotContain(newZealandUser);
 
     }
 

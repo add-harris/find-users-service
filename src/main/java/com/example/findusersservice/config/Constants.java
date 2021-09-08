@@ -8,6 +8,10 @@ public class Constants {
 
     public static final String USERS_LONDON_PATH_V1 = "/v1/users/london";
     public static final String APPLICATION_JSON = "application/json";
+    public static final String API_TITLE = "Find Users Service";
+    public static final String API_VERSION = "0.1.0";
+    public static final String API_DESCRIPTION = "API that returns all users who are listed as either living in London, or whose current coordinates are within 50 miles of London.";
+    public static final String API_TAG = "Find User";
 
     /**
      * Error Constants

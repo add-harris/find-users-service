@@ -7,6 +7,10 @@ server:
   servlet:
     context-path: /find-users
 
+springdoc:
+  swagger-ui:
+    try-it-out-enabled: false
+
 application:
   base-backend-url: https://bpdts-test-app.herokuapp.com
   city-endpoint: /city/London/users

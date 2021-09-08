@@ -56,47 +56,64 @@ curl http://localhost:8080/find-users/v1/users/london
 ]
 ```
 
-# Testing
+## Testing
 
-## Unit Tests
+### Unit Tests
 
-To run use command:
+To run unit tests use command:
 ```shell
 mvn clean test
 ```
 
-## Integration Tests
+### Integration Tests
 
-This repo includes a full set of integrations test that can be ran in memory, without any external dependencies.
-
-
-To run use command:
+To run integration tests use command:
 ```shell
 mvn clean verify
 ```
 
-### Explained
+## Key Features
 
-These tests are constructed with 
+### WebFlux
+
+As Springs RestTemplate is now deprecated, this application makes use of Springs WebFlux,
+a new reactive HTTP client able to make HTTP asynchronously.
+
+### SpringDoc and Swagger-UI
+
+This project is self documenting and features a very simplistic implementation of
+OpenApi 3 specifications using [SpringDoc OpenApi](https://springdoc.org/).
+
+Swagger Ui is available by running the application and going to: 
+- http://localhost:8080/find-users/swagger-ui.html
+
+The API specification is also available in both JSON and YAML formats at:
+- http://localhost:8080/find-users/v3/api-docs
+- http://localhost:8080/find-users/v3/api-docs.yaml
+
+### Self Contained Integration Testing
+
+This repo includes a full set of integrations test that can be ran in memory, 
+without any external dependencies. These tests are constructed with
 [Spring-Boot-Test](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test),
-[WireMock](http://wiremock.org/), Springs 
+[WireMock](http://wiremock.org/), Springs
 [WebTestClient](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/reactive/server/WebTestClient.html),
 and [Mavens Failsafe plugin](https://maven.apache.org/surefire/maven-failsafe-plugin/).
+
+Heres how it works:
 - The tests use Spring-Boots `@SpringBootTest` annotation to load the whole application and start it
   on a random available port.
 - WebClientTest, which is a wrapper for WebClient, is then used to make real http requests to the running application.
-- WireMock is used to spin up an in-memory stub server running on a separate port, 
+- WireMock is used to spin up an in-memory stub server running on a separate port,
   and is configured to return stubbed responses.
-- For the purposes of the tests the application is configured to make its backend requests to the 
+- For the purposes of the tests the application is configured to make its backend requests to the
   in-memory stubbed server instead of the real backend endpoints, allowing almost full end-to-end testing
   without the need of any external environment or dependencies.
 - The tests are ran using Maven's Failsafe plugin, a plugin designed for longer running integration tests,
   and is configured to pick any tests in the `src/test/java/com/example/findusersservice/integration`
   directory ending in `IT`.
 
-
-## The Boring Bits
-### Criteria and Assumptions
+## Criteria and Assumptions
 
 The Criteria for this assignment has been given as follows:
 

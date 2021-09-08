@@ -114,8 +114,9 @@ class AreaFilterServiceImplTest {
     }
 
     /**
-     * Over incredibly long distances the formula becomes less accurate, so must be rounded further.
-     * However it is still well within tolerance to meet the requirements of this service.
+     * Over incredibly long distances the formula to calculate distance becomes less accurate, so must be rounded further.
+     * However over distances of thousands of miles, it still only needs to be rounded to the nearest mile to remain accurate,
+     * making it easily accurate enough for the purposes of this application.
      */
     private double roundedLongDistanceAnswer(double numberToRound) {
         return (double)Math.round(numberToRound);

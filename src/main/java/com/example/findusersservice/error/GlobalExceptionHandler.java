@@ -12,7 +12,7 @@ import static com.example.findusersservice.config.Constants.*;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorResponse> handleWebClientError(Exception exception) {
 
         ErrorResponse errorResponse = new ErrorResponse();

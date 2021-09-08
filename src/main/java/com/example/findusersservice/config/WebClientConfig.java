@@ -22,12 +22,16 @@ public class WebClientConfig {
         this.appConfig = appConfig;
     }
 
+    /**
+     * Initializing an insecure WebClient like this not ideal and should not be used for production.
+     * However this is a current limitation of WebClient and is acceptable for this test exercise.
+     */
+
     @Bean
     public WebClient initWebClient() {
         log.info("initializing custom WebClient");
 
         try {
-
             SslContext sslContext = SslContextBuilder
                     .forClient()
                     .trustManager(InsecureTrustManagerFactory.INSTANCE)

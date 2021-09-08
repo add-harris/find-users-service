@@ -55,6 +55,26 @@ class AreaFilterServiceImplTest {
     }
 
     @Test
+    void calculate_distances_correctly_for_very_far_away_users() {
+        double farAwayUserDistance1 = calculateDistance(northernIrelandUser);
+        double farAwayUserDistance2 = calculateDistance(scotlandUser);
+        double farAwayUserDistance3 = calculateDistance(southWestUser);
+        assertEquals(383.35, roundedAnswer(farAwayUserDistance1));
+        assertEquals(516.97, roundedAnswer(farAwayUserDistance2));
+        assertEquals(261.78, roundedAnswer(farAwayUserDistance3));
+    }
+
+    @Test
+    void calculate_distances_correctly_for_international_users() {
+        double internationalUserDistance1 = calculateDistance(icelandUser);
+        double internationalUserDistance2 = calculateDistance(indiaUser);
+        double internationalUserDistance3 = calculateDistance(newZealandUser);
+        assertEquals(1170.75, roundedAnswer(internationalUserDistance1));
+        assertEquals(4982.05, roundedAnswer(internationalUserDistance2));
+        assertEquals(11796.23, roundedAnswer(internationalUserDistance3));
+    }
+
+    @Test
     void given_users_that_are_within_50_miles_return_true() {
         allLondonUsers().forEach(user -> {
             assertTrue(this.areaFilterService.isWithinArea(user));

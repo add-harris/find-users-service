@@ -81,7 +81,7 @@ public class TestFixtures {
 
     // Distance 50.06 miles West of centre
     // Coordinates 51.409584, -1.279978
-    public static final User outsideAreaUser1 = stubUserGenerator(11, -1.279978, 51.409584);
+    public static final User outsideAreaUser1 = stubUserGenerator(10, -1.279978, 51.409584);
 
     // Distance 50.03 miles North of centre
     // Coordinates 52.227106, -0.25755
@@ -89,11 +89,44 @@ public class TestFixtures {
 
     // Distance 50.39 miles East of centre
     // Coordinates 51.310280, 0.997813
-    public static final User outsideAreaUser3 = stubUserGenerator(11, 0.997813, 51.310280);
+    public static final User outsideAreaUser3 = stubUserGenerator(12, 0.997813, 51.310280);
 
     // Distance 50.11 miles South of centre
     // Coordinates 50.804130, 0.154945
-    public static final User outsideAreaUser4 = stubUserGenerator(11, 0.154945, 50.804130);
+    public static final User outsideAreaUser4 = stubUserGenerator(13, 0.154945, 50.804130);
+
+    /**
+     * Very Far Outside London Area Users - people in the UK but live very far from London
+     */
+
+    // Distance 383.35 miles from Centre
+    // Coordinates 55.010775, -7.330153
+    public static final User northernIrelandUser = stubUserGenerator(14, -7.330153, 55.010775);
+
+    // Distance 516.97 miles from Centre
+    // Coordinates 58.493643, -4.819670
+    public static final User scotlandUser = stubUserGenerator(14, -4.819670, 58.493643);
+
+    // Distance 261.78 miles from Centre
+    // Coordinates 50.046830, -5.658375
+    public static final User southWestUser = stubUserGenerator(15, -5.658375, 50.046830);
+
+    /**
+     * Edge Case Users - people extremely far from London Centre
+     */
+
+    // Distance 1170.75 miles from Centre
+    // Coordinates 64.127402, -21.830721
+    public static final User icelandUser = stubUserGenerator(16, -21.830721, 64.127402);
+
+    // Distance 4982.05 miles from Centre
+    // Coordinates 19.979095, 85.967849
+    public static final User indiaUser = stubUserGenerator(17, 85.967849, 19.979095);
+
+    // Distance 11796.23 miles from Centre
+    // Coordinates -43.590232, 172.688372
+    public static final User newZealandUser = stubUserGenerator(18, 172.688372, -43.590232);
+
 
     private static User stubUserGenerator(int id, double longitude, double latitude) {
         return new User(

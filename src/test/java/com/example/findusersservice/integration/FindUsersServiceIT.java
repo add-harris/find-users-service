@@ -26,10 +26,6 @@ public class FindUsersServiceIT extends WireMockTest {
         wireMockServer.resetAll();
     }
 
-    // returns city users
-    // returns filtered user users
-    // returns combined city and users
-
     // returns PROBLEM_UPSTREAM on backend 500
     // returns PROBLEM_UPSTREAM on backend 404
     // returns UNEXPECTED_RESPONSE on malformed json
@@ -90,6 +86,41 @@ public class FindUsersServiceIT extends WireMockTest {
                 .expectStatus()
                 .isOk()
                 .expectBodyList(User.class)
+                .doesNotContain(outsideAreaUser1)
+                .doesNotContain(outsideAreaUser2)
+                .doesNotContain(outsideAreaUser3)
+                .doesNotContain(outsideAreaUser4)
+                .doesNotContain(northernIrelandUser)
+                .doesNotContain(scotlandUser)
+                .doesNotContain(southWestUser)
+                .doesNotContain(icelandUser)
+                .doesNotContain(indiaUser)
+                .doesNotContain(newZealandUser);
+
+    }
+
+    /**
+     * This test verifies the application gets users from both the city endpoint and the user endpoint,
+     * filters users from the user endpoint for only those withing range, then returns a combined list.
+     */
+    @Test
+    void application_full_test() throws Exception {
+        stubCityEndpointWithResponse(cityEndpointUsersJson());
+        stubUserEndpointWithResponse(allInsideAndOutsideAreaUsersJson());
+
+        callApplication()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(User.class)
+                .contains(cityEndpointUser1)
+                .contains(cityEndpointUser2)
+                .contains(centralLondonUser1)
+                .contains(centralLondonUser2)
+                .contains(centralLondonUser3)
+                .contains(outerLondonUser1)
+                .contains(outerLondonUser2)
+                .contains(outerLondonUser3)
+                .contains(outerLondonUser4)
                 .doesNotContain(outsideAreaUser1)
                 .doesNotContain(outsideAreaUser2)
                 .doesNotContain(outsideAreaUser3)

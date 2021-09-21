@@ -148,7 +148,7 @@ class UserServiceImplTest extends WireMockTest {
             this.userService.getUsers();
         });
 
-        String expectedMessageSnippet = "JSON decoding error: Unexpected character (',' (code 44)): was expecting double-quote to start field name;";
+        String expectedMessageSnippet = "JSON decoding error: Cannot deserialize value of type `java.util.ArrayList<com.example.findusersservice.models.User>`";
         assertTrue(exception.getMessage().contains(expectedMessageSnippet));
     }
 

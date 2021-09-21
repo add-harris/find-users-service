@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,16 +32,19 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsers() {
         log.info("getting users");
 
-        log.info("making request to city endpoint {} for London users", cityApiEndpoint);
+        log.info("preparing request to city endpoint {} for London users", cityApiEndpoint);
         Flux<User> londonUsers = getLondonCityUsers();
 
-        log.info("making request to users endpoint {} for all users", userApiEndpoint);
+        log.info("preparing request to users endpoint {} for all users", userApiEndpoint);
         Flux<User> allUsers = getLondonAreaUsers();
 
         log.info("filtering for only users within designated area");
         Flux<User> londonAreaUsers = allUsers.filter(areaFilterService::isWithinArea);
 
-        return Flux.mergeSequential(londonUsers, londonAreaUsers).collectList().block();
+        return Flux.merge(londonUsers, londonAreaUsers)
+                .toStream()
+                .sorted(Comparator.comparing(User::getId))
+                .collect(Collectors.toList());
 
     }
 
@@ -56,6 +61,7 @@ public class UserServiceImpl implements UserService {
                 .uri(endpoint)
                 .retrieve()
                 .bodyToFlux(User.class)
+                .doOnComplete(() -> log.info("request to {} completed successfully", endpoint))
                 .onErrorResume(error -> Flux.error(new RuntimeException(error.getMessage(), error)));
     }
 

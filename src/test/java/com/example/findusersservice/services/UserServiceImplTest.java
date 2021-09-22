@@ -139,6 +139,20 @@ class UserServiceImplTest extends WireMockTest {
         assertTrue(exception.getMessage().contains(expectedMessageSnippet));
     }
 
+
+    @Test
+    void handles_incomplete_json_returned_from_backend_endpoint () throws Exception {
+        stubEndpointWithFileResponse(testCityEndpoint, "incompleteUser.json");
+        stubUserEndpoint();
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            this.userService.getUsers();
+        });
+
+        String expectedMessageSnippet = "JSON decoding error: Missing required creator property 'longitude'";
+        assertTrue(exception.getMessage().contains(expectedMessageSnippet));
+    }
+
     @Test
     void handles_garbage_json_returned_from_backend_endpoint () throws Exception {
         stubCityEndpoint();

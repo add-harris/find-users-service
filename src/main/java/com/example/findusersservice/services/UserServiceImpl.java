@@ -62,7 +62,10 @@ public class UserServiceImpl implements UserService {
                 .retrieve()
                 .bodyToFlux(User.class)
                 .doOnComplete(() -> log.info("request to {} completed successfully", endpoint))
-                .onErrorResume(error -> Flux.error(new RuntimeException(error.getMessage(), error)));
+                .onErrorResume(error -> {
+                    log.error(error.getMessage());
+                    return Flux.error(new RuntimeException(error.getMessage(), error));
+                });
     }
 
 }

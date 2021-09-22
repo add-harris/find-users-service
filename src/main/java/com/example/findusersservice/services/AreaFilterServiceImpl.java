@@ -14,12 +14,7 @@ public class AreaFilterServiceImpl implements AreaFilterService {
 
     @Override
     public boolean isWithinArea(User user) {
-        log.info("checking user with id: {}", user.getId());
-
-        double distance = calculateDistanceFromCenter(user.getLatitude(), user.getLongitude());
-        log.info("distance from centre of london calculated at: {}", distance);
-
-        return distance <= searchAreaMiles;
+        return calculateDistanceFromCenter(user.getLatitude(), user.getLongitude()) <= searchAreaMiles;
     }
 
     double calculateDistanceFromCenter(double userLatitude, double userLongitude) {
